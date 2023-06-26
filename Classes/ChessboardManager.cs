@@ -232,6 +232,20 @@ namespace Chessboard.Classes
                        distance == 7  || distance == 9;
             }
 
+            if (distance == 2)
+            {
+                if (FindPiece(piece.IsWhite ? 61 : 5) != null || FindPiece(piece.IsWhite ? 62 : 6) != null)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (FindPiece(piece.IsWhite ? 57 : 1) != null || FindPiece(piece.IsWhite ? 58 : 2) != null || FindPiece(piece.IsWhite ? 59 : 3) != null)
+                {
+                    return false;
+                }
+            }
             if (piece.GetSquare() == kingPos && rook.GetPiece() == 4)
             {
                 return !(piece.IsMoved || rook.IsMoved);
