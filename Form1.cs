@@ -54,6 +54,40 @@ namespace Chessboard
             srcSquare = null;
         }
 
+        private void SquareMouseDown(object? sender, MouseEventArgs e)
+        {
+            if (sender == null)
+            {
+                return;
+            }
+            ChessboardSquare square = (ChessboardSquare)sender;
+            if (square.SquareNum != 0)
+            {
+                DoDragDrop(square.SquareNum, DragDropEffects.Move);
+            }
+        }
+
+        private void SquareDragOver(object? sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void SquareDragDrop(object? sender, DragEventArgs e)
+        {
+            if (sender == null)
+            {
+                return;
+            }
+            ChessboardSquare square = (ChessboardSquare)sender;
+
+            int from = (int)e.Data.GetData(typeof(int));
+            int to = square.SquareNum;
+
+            chessboardManager.MovePiece(from, to);
+            SetPieces();
+            DrawPieces();
+        }
+
         private void SetPieces()
         {
             List<ChessPiece> pieces = chessboardManager.GetPieces();
@@ -90,7 +124,11 @@ namespace Chessboard
                     s.Height = 50;
                     s.BackColor = (i + j) % 2 == 0 ? Color.Snow : Color.DimGray;
 
+                    s.AllowDrop = true;
                     s.Click += BtnClicked;
+                    s.MouseDown += SquareMouseDown;
+                    s.DragOver += SquareDragOver;
+                    s.DragDrop += SquareDragDrop;
 
                     _squareList[i * 8 + j] = s;
                     panelSzach.Controls.Add(s);
